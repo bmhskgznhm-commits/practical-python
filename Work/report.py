@@ -1,31 +1,16 @@
 # report.py
-import csv
 import sys
+import fileparse
 
 
 def read_portfolio(filename):
     """
     Opens a given portfolio file and
     reads it into a list of dictionaries
-    :param filename: The name of the CSV file containing the portfolio data.
+    :param filename: The name of the file containing the portfolio data.
     :return: A list of dictionaries, each representing a stock holding with keys 'name', 'shares', and 'price'.
     """
-    portfolio = []  # Collect each holding as a dictionary
-    with open(filename) as file:
-        rows = csv.reader(file)
-        headers = next(rows)  # Skip the header row
-
-        # Map each CSV row to a dictionary using the column names.
-        for row in rows:
-            record = dict(zip(headers, row))
-            holding = {
-                'name': record['name'],
-                'shares': int(record['shares']),
-                'price': float(record['price'])
-            }
-            portfolio.append(holding)  # Save the parsed holding
-
-    return portfolio
+    return fileparse.parse_file(filename, select=['name', 'shares', 'price'], types=[str, int, float])
 
 
 def read_prices(filename):
@@ -36,19 +21,7 @@ def read_prices(filename):
     :param filename: The name of the CSV file containing the stock prices.
     :return: A dictionary mapping stock names to their current prices.
     """
-    prices = {}  # Stock name -> current price lookup
-    with open(filename) as file:
-        rows = csv.reader(file)
-        # Build a dictionary of prices for fast lookup by stock name.
-        for rowno, row in enumerate(rows, start=1):
-            try:
-                # Convert the price string to a float
-                prices[row[0]] = float(row[1])
-            except IndexError:
-                # Skip malformed rows and report them
-                print(f'Row {rowno}: Bad value: {row}')
-                pass
-    return prices
+    return dict(fileparse.parse_file(filename, types=[str, float], has_headers=False))
 
 
 def compute(filename, filename_prices):
