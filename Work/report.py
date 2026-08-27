@@ -10,7 +10,8 @@ def read_portfolio(filename):
     :param filename: The name of the file containing the portfolio data.
     :return: A list of dictionaries, each representing a stock holding with keys 'name', 'shares', and 'price'.
     """
-    return fileparse.parse_file(filename, select=['name', 'shares', 'price'], types=[str, int, float])
+    with open(filename) as lines:
+        return fileparse.parse_file(lines, select=['name', 'shares', 'price'], types=[str, int, float])
 
 
 def read_prices(filename):
@@ -21,7 +22,8 @@ def read_prices(filename):
     :param filename: The name of the CSV file containing the stock prices.
     :return: A dictionary mapping stock names to their current prices.
     """
-    return dict(fileparse.parse_file(filename, types=[str, float], has_headers=False))
+    with open(filename) as lines:
+        return dict(fileparse.parse_file(lines, types=[str, float], has_headers=False))
 
 
 def compute(filename, filename_prices):
@@ -102,19 +104,6 @@ def print_report(report):
             f"{row[0]:>10s} {row[1]:>10d} {'$' + f'{row[2]:.2f}':>10s} {'$' + f'{row[3]:.2f}':>10s}")
 
 
-if len(sys.argv) == 3:  # Use command-line arguments when both filenames are given
-    portfolio_file = sys.argv[1]
-    prices_file = sys.argv[2]
-else:
-    # Prompt for filenames and fall back to the default data files if blank.
-    portfolio_file = input('Enter the portfolio filename: ')
-    if portfolio_file == '':
-        portfolio_file = 'C://Users//noahz//practical-python//Work//Data//portfolio.csv'
-    prices_file = input('Enter the prices filename: ')
-    if prices_file == '':
-        prices_file = 'C://Users//noahz//practical-python//Work//Data//prices.csv'
-
-
 def portfolio_report(portfolio_file, prices_file):
     """
     Generates and prints a report of the stock portfolio.
@@ -128,5 +117,11 @@ def portfolio_report(portfolio_file, prices_file):
     print_report(report)
 
 
-# Run the report with the chosen files
-portfolio_report(portfolio_file, prices_file)
+def main(args):
+    if len(args) != 3:
+        raise SystemExit('Usage: %s portfoliofile pricefile' % args[0])
+    portfolio_report(args[1], args[2])
+
+
+if __name__ == '__main__':
+    main(sys.argv)

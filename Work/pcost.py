@@ -14,12 +14,12 @@ def portfolio_cost(filename):
     return sum([s['shares'] * s['price'] for s in portfolio])
 
 
-if len(sys.argv) == 2:
-    filename = sys.argv[1]
-else:
-    filename = input('Enter a filename: ')
-    if filename == '':
-        filename = 'C://Users/noahz/practical-python/Work/Data/portfolio.csv'
+def main(args):
+    if len(args) != 2:
+        raise SystemExit('Usage: %s portfoliofile' % args[0])
+    filename = args[1]
+    print(f'TOTAL COST: ${portfolio_cost(filename):,.2f}')
 
-cost = portfolio_cost(filename)
-print(f'Total Cost: ${cost:,.2f}')
+
+if __name__ == '__main__':
+    main(sys.argv)
