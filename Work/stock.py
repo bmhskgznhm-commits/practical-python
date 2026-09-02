@@ -1,0 +1,16 @@
+# Exercises 4.1 - 4.4
+
+class Stock:
+    def __init__(self, name, shares, price):
+        self.name = name
+        self.shares = shares
+        self.price = price
+
+    def cost(self):
+        return self.shares * self.price
+
+    def sell(self, shares):
+        self.shares -= shares
+
+    def buy(self, shares):
+        self.shares += shares
