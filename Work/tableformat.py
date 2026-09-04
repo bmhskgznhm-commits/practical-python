@@ -60,7 +60,16 @@ class HTMLTableFormatter(TableFormatter):
         print("<tr>" + "".join(f"<td>{r}</td>" for r in rowdata) + "</tr>")
 
 
+class FormatError(Exception):
+    pass
+
+
 def create_table_formatter(fmt):
+    '''
+    Create a table formatter based on the format string.
+    :param fmt: A string representing the table format type ('txt', 'csv', or 'html').
+    :returns: A table formatter instance corresponding to the specified format.
+    '''
     if fmt == 'txt':
         return TextTableFormatter()
     elif fmt == 'csv':
@@ -68,4 +77,19 @@ def create_table_formatter(fmt):
     elif fmt == 'html':
         return HTMLTableFormatter()
     else:
-        raise RuntimeError(f"Unknown format '{fmt}'")
+        raise FormatError(f"Unknown table format '{fmt}'")
+
+
+def print_table(objects, formatter, headers=None):
+    '''
+    Make a nicely formatted table from a list of objects and attributes.
+    :param objects: A list of objects containing the data to display in the table.
+    :param formatter: A table formatter instance to use for formatting the table.
+    :param headers: A list of strings representing the attributes to display as table headings.
+    '''
+    if headers:
+        formatter.title("Stock Table")
+        formatter.headings(headers)
+    for obj in objects:
+        rowdata = [str(getattr(obj, attr)) for attr in headers]
+        formatter.row(rowdata)
