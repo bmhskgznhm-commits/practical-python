@@ -3,7 +3,7 @@ import sys
 import fileparse
 from stock import Stock
 import tableformat
-from tableformat import create_table_formatter
+from portfolio import Portfolio
 
 
 def read_portfolio(filename):
@@ -19,7 +19,7 @@ def read_portfolio(filename):
 
         portfolio = [Stock(d['name'], d['shares'], d['price'])
                      for d in portdicts]
-        return portfolio
+        return Portfolio(portfolio)
 
 
 def read_prices(filename):
@@ -123,7 +123,7 @@ def portfolio_report(portfolio_file, prices_file, fmt='txt'):
     report = make_report(portfolio, prices)
 
     # Format and print the report
-    formatter = create_table_formatter(fmt)
+    formatter = tableformat.create_table_formatter(fmt)
     print_report1(report, formatter)
 
 
