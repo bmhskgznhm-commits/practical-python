@@ -3,6 +3,11 @@ import time
 
 
 def follow(filename):
+    '''
+    Generates lines from a file as they are added, similar to the Unix 'tail -f' command.
+    :param filename: The name of the file to follow.
+    :yield: Each new line added to the file.
+    '''
     f = open(filename, 'r')
     f.seek(0, os.SEEK_END)
 
