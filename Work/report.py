@@ -6,7 +6,7 @@ import tableformat
 from portfolio import Portfolio
 
 
-def read_portfolio(filename):
+def read_portfolio(filename, **opts):
     """
     Opens a given portfolio file and
     reads it into a list of dictionaries
@@ -14,12 +14,7 @@ def read_portfolio(filename):
     :return: A list of dictionaries, each representing a stock holding with keys 'name', 'shares', and 'price'.
     """
     with open(filename) as lines:
-        portdicts = fileparse.parse_file(
-            lines, select=['name', 'shares', 'price'], types=[str, int, float])
-
-        portfolio = [Stock(d['name'], d['shares'], d['price'])
-                     for d in portdicts]
-        return Portfolio(portfolio)
+        return Portfolio.from_file(lines, **opts)
 
 
 def read_prices(filename):

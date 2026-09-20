@@ -1,14 +1,38 @@
+import stock
+import fileparse
+
+
 class Portfolio:
     '''
     A collection of stock holdings.
     '''
 
-    def __init__(self, holdings):
+    def __init__(self):
         '''
         Initializes a new Portfolio instance.
-        :param holdings: A list of stock holdings.
         '''
-        self._holdings = holdings
+        self._holdings = []
+
+    @classmethod
+    def from_file(cls, lines, **opts):
+        self = cls()
+        portdicts = fileparse.parse_file(
+            lines, select=['name', 'shares', 'price'], types=[str, int, float], **opts)
+
+        for d in portdicts:
+            self.append(stock.Stock(**d))
+
+        return self
+
+    def append(self, holding):
+        '''
+        Adds a new stock holding to the portfolio.
+        :param holding: An instance of the Stock class representing a stock holding.
+        :raises TypeError: If the provided holding is not an instance of the Stock class.
+        '''
+        if not isinstance(holding, stock.Stock):
+            raise TypeError('Expected a stock instance')
+        self._holdings.append(holding)
 
     def __iter__(self):
         '''
