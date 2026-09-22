@@ -1,9 +1,8 @@
 # report.py
 import sys
-import fileparse
-from stock import Stock
-import tableformat
-from portfolio import Portfolio
+from . import fileparse
+from . import tableformat
+from . import portfolio
 
 
 def read_portfolio(filename, **opts):
@@ -14,7 +13,7 @@ def read_portfolio(filename, **opts):
     :return: A list of dictionaries, each representing a stock holding with keys 'name', 'shares', and 'price'.
     """
     with open(filename) as lines:
-        return Portfolio.from_file(lines, **opts)
+        return portfolio.Portfolio.from_file(lines, **opts)
 
 
 def read_prices(filename):

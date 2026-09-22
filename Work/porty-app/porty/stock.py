@@ -1,5 +1,5 @@
 # Exercises 4.1 - 4.4
-import typedproperty
+from . import typedproperty
 
 
 class Stock:
